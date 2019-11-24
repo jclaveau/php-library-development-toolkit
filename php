@@ -1,25 +1,5 @@
 #!/bin/bash
 
-if [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup; then 
-        echo $(command -v docker)
-        # exit;
-    else 
-        docker_path=$(command -v docker)
-        if [ -z "$docker_path" ]; then
-            # echo "docker not installed"
-            echo $docker_path
-            read -p "Do you want to install docker? " -n 1 -r
-            # echo    # (optional) move to a new line
-            if [[ $REPLY =~ ^[Yy]$ ]]
-            then
-                sudo apt-get install docker
-            fi
-        else
-            # echo "docker installed"
-            echo ""
-        fi
-fi
-
 version=7.3
 
 while :; do
@@ -67,17 +47,33 @@ done
 # echo $version;
 # echo "$@";    
 # echo $1;
+# --name php-multiversion \
 
-docker run -it --rm \
-    --name php-multiversion \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v $(pwd):/usr/src/myapp \
-    -w /usr/src/myapp \
-    jclaveau/php-multiversion php$version "$@"
-
-# docker run -it --rm \
-    # --name my-php-test \
-    # -v /var/run/docker.sock:/var/run/docker.sock \
-    # -v $(pwd):/usr/src/myapp \
-    # -w /usr/src/myapp \
-    # jclaveau/php-multiversion lsb_release
+if [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup; then 
+        # we do not need to restart a container with php multiversion
+        php$version "$@"
+    else 
+    
+        docker_path=$(command -v docker)
+        if [ -z "$docker_path" ]; then
+            # echo "docker not installed"
+            echo $docker_path
+            read -p "Do you want to install docker? " -n 1 -r
+            # echo    # (optional) move to a new line
+            if [[ $REPLY =~ ^[Yy]$ ]]
+            then
+                sudo apt-get install docker
+            fi
+        fi
+        
+        # docker with siblings
+            # -v /var/run/docker.sock:/var/run/docker.sock \
+        
+        echo "Docker: php$version $@"
+        
+        docker run -it --rm \
+            -v $(pwd):$(pwd) \
+            -w $(pwd) \
+            jclaveau/php-multiversion php$version "$@"
+        
+fi
