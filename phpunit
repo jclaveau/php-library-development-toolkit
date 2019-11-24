@@ -3,17 +3,15 @@
 
 if (PHP_VERSION_ID < 70000) {
     // generate PHP 5.6 classes
-    system(__DIR__ . '/retrocompatibility_generator');
+    system('./retrocompatibility_generator');
 }
 
 // remove the ./phpunit
 $args = $argv;
 array_shift($args);
 
-if (PHP_VERSION_ID >= 70000) {
-    $config = 'tests/phpunit.xml';    
-}
-else {
+$config = 'tests/phpunit.xml';    
+if (PHP_VERSION_ID < 70000 && file_exists('tests/phpunit_5.6.xml')) {
     $config = 'tests/phpunit_5.6.xml';
 }
 
@@ -23,10 +21,9 @@ $version = $version[0] . '.' . $version[1];
 $phpunit_path = './vendor_'.$version.'/bin/phpunit';
 
 if ( ! is_file($phpunit_path)) {
-    system($php_bin.' ./composer install');
+    system('php'.$version.' '. __DIR__ .'/composer install');
 }
 
-// var_dump($phpunit_path);
 system(
     'php'.$version.' '.$phpunit_path.' --config ' . $config
     . ' ' . implode(' ', $args) . ' ' 
