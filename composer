@@ -1,0 +1,36 @@
+#!/usr/bin/env php
+<?php
+
+// remove the ./composer
+$args = $argv;
+array_shift($args);
+ 
+$version = explode('.',phpversion());
+$version = $version[0] . '.' . $version[1];
+
+
+// copy composer .json
+copy('composer.json', 'composer_'.$version.'.json');
+putenv("COMPOSER=composer_$version.json");
+
+
+// call composer specifying the vendor_dir
+putenv("COMPOSER_VENDOR_DIR=vendor_$version");
+
+$args = $argv;
+array_shift($args);
+
+function command_path($command)
+{
+    $windows = strpos(PHP_OS, 'WIN') === 0;
+    $test = $windows ? 'where' : 'command -v';
+    return trim( shell_exec("$test $command"));
+}
+
+$out = system(
+    'php'.$version.' '.command_path("composer")
+    . ' ' . implode(' ', $args) . ' ' 
+);
+
+
+unlink("composer_$version.json");
