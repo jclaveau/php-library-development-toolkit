@@ -1,0 +1,3 @@
+[submodule "tools/7to5"]
+	path = tools/7to5
+	url = https://github.com/jclaveau/7to5

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+target="tools/7to5"
+
+dir=$(pwd)
+
+# Install if missing
+if [ -z "$(ls -A $target)" ]; then
+    git submodule update --init --recursive
+fi
+
+cd $target
+
+if [ -z "$(ls -A vendor)" ]; then
+    # composer install 
+    $dir/php /usr/local/bin/composer install
+fi
+
+cd ../..
+
+# doesn't work with 5.6
+./php 7.3 $target convert src/ src_5.6 --overwrite
