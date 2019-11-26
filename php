@@ -75,7 +75,7 @@ if [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup; then
             -v $(pwd):$(pwd) \
             -w $(pwd) \
             --user $(id -u):$(id -g) \
-            --volume="$HOME:$HOME:rw" \  # for .bashrc and .composer cache
+            --volume="$HOME:$HOME:rw" \
             --volume="/etc/group:/etc/group:ro" \
             --volume="/etc/passwd:/etc/passwd:ro" \
             --volume="/etc/shadow:/etc/shadow:ro" \
