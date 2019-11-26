@@ -29,7 +29,7 @@ function command_path($command)
 
 $out = system(
     'php'.$version.' '.command_path("composer")
-    . ' ' . implode(' ', $args) . ' ' 
+    . ' --ansi ' . implode(' ', $args) . ' ' 
 );
 
 
