@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# get the relative path of the tools
+lib_dir=$(pwd)
+tools_dir=$(dirname $(readlink -f "$0"))
+path='.'$(echo "$tools_dir" | sed "s|$lib_dir||")
+
+# Create symlinks
+tools=( php composer phpunit phpdoc )
+for tool in "${tools[@]}"
+do
+    if [ -z "$(ls -A $tool)" ]; then
+        ln -s $path/$tool $tool
+    else
+        echo $tool" already exists in "$lib_dir 
+    fi
+done
