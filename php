@@ -1,11 +1,11 @@
 #!/bin/bash
 
-version=7.3
+versions=()
 
 while :; do
     case $1 in
         5.6|7.0|7.1|7.2|7.3)       # Takes an option argument; ensure it has been specified.
-            version=$1
+            versions+=($1)
             ;;
         *)               # Default case: No more options, so break out of the loop.
             break
@@ -13,6 +13,11 @@ while :; do
 
     shift
 done
+
+if [ ${#versions[@]} == 0 ] 
+then
+    versions+=(7.3)
+fi
 
 if [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup; then 
         # we do not need to restart a container with php multiversion
@@ -31,20 +36,25 @@ if [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup; then
             fi
         fi
         
-        echo "Docker: php$version $@"
         
         # avoid https://stackoverflow.com/questions/43099116/error-the-input-device-is-not-a-tty
         test -t 1 && USE_TTY="-t" 
         
-        docker run -i ${USE_TTY} --rm \
-            -v $(pwd):$(pwd) \
-            -w $(pwd) \
-            --user $(id -u):$(id -g) \
-            --volume="$HOME:$HOME:rw" \
-            --volume="/etc/group:/etc/group:ro" \
-            --volume="/etc/passwd:/etc/passwd:ro" \
-            --volume="/etc/shadow:/etc/shadow:ro" \
-            --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-            jclaveau/php-multiversion php$version "$@"
+        for version in "${versions[@]}"; 
+        do 
+            echo "Docker: php$version $@"
+            
+            docker run -i ${USE_TTY} --rm \
+                -v $(pwd):$(pwd) \
+                -w $(pwd) \
+                --user $(id -u):$(id -g) \
+                --volume="$HOME:$HOME:rw" \
+                --volume="/etc/group:/etc/group:ro" \
+                --volume="/etc/passwd:/etc/passwd:ro" \
+                --volume="/etc/shadow:/etc/shadow:ro" \
+                --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
+                jclaveau/php-multiversion php$version "$@"
+        done
+        
         
 fi

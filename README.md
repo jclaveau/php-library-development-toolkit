@@ -15,7 +15,7 @@ Run your tests
 ./phpunit
 ./php 7.1 phpunit
 ./php * phpunit # todo
-./php 7.1 composer update
+./php 7.1 7.3 composer update # run composer update with php 7.1 and php 7.3
 ./php 5.6 phpunit # automatically generate PHP 5.6 code and apply tests on it
 ```
 
@@ -55,7 +55,3 @@ Dependencies will change depending on the PHP version you use so the ./composer 
 ./php 5.6 composer update
 ./php 7.1 composer update
 ```
-
- 
-
-
