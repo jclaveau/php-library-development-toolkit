@@ -1,7 +1,7 @@
 /vendor
 /vendor_*/
 /.idea
-/tests/coverage*
+/coverage*
 /clover.xml
 /api_reference/phpdoc-*
 .directory
