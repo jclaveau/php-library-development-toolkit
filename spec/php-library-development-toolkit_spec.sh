@@ -1,4 +1,4 @@
-Describe "Sample specfile"
+Describe "PHP"
   Describe "php"
     It "runs php in multiple versions"
       When run source ./php 5.6 7.0 7.3 spec/phpversion.php
