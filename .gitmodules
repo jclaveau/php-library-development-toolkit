@@ -1,9 +1,9 @@
 [submodule "tools/7to5"]
 	path = tools/7to5
 	url = https://github.com/jclaveau/7to5
-[submodule "tools/phpdoc-markdown-public"]
-	path = tools/phpdoc-markdown-public
-	url = https://github.com/cvuorinen/phpdoc-markdown-public/
 [submodule "tools/docker-php-multiversion"]
 	path = tools/docker-php-multiversion
 	url = https://github.com/jclaveau/docker-php-multiversion
+[submodule "tools/phpdoc-md"]
+	path = tools/phpdoc-md
+	url = https://github.com/evert/phpdoc-md
