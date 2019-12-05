@@ -29,4 +29,9 @@ fi
     --template="xml" \
     --title="Specify the Title you want here"
 
-$app_dir/php 7.3 $target/bin/phpdocmd api_reference/structure.xml api_reference
+
+if [ -f api_reference/structure.xml ]; then
+    $app_dir/php 7.3 $target/bin/phpdocmd api_reference/structure.xml api_reference
+else
+    echo "Nothing to extract documentation from"
+fi
